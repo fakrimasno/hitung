@@ -1,0 +1,133 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+}
+.navbar h1{
+    font-size: 24px;
+    font-weight: bold;
+}
+.navbar ul{
+    display: flex;
+    list-style: none;
+    gap: 5px;
+}
+.navbar ul li a{
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+.navbar ul li a:hover{
+    background-color: #007bff;
+}
+
+.navbar ul li a.active{
+    background-color: #206ab9;
+}
+.layout{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    max-width: 720px;
+    margin-inline: auto;
+}
+
+.soal{
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+    margin:20px 0;
+    font-weight: 600;
+}
+
+.buahan{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-size: 46px;
+}
+.kiri, .kanan{
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-align: center;
+    
+}
+.angka{
+    font-size: 20px;
+    font-weight: bold;
+    padding: 9px;
+    border-radius: 3px;
+}
+.buahan img{
+    width: 160px;
+}
+
+#next{
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+.hilang{
+    display: none;
+}
+
+.jawaban{
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745;
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.jawaban button{
+    padding: 10px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #118d2c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+}
+.jawaban button:hover{
+    background-color: #28a745;
+    box-shadow: none;
+}
+.respon{
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}

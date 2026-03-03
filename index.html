@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+    <div class="navbar">
+        <h1>Brand</h1>
+        <ul>
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="tambah.html">Penjumlahan</a></li>
+            <li><a href="kurang.html">Pengurangan</a></li>
+            <li><a href="uang.html">Uang</a></li>
+            <li><a href="jumlahuang.html">Jumlah Uang</a></li>
+        </ul>
+    </div>
+    <div class="layout">
+        <h2>Ayo Kita menghitung</h2>
+        <div class="info">
+            <p id="level">Level: 1</p>
+            <div><select name="tingkat" id="tingkat">
+                    <option value="">Pilih Level</option>
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                    <option value="3">Level 3</option>
+                    <option value="4">Level 4</option>
+                </select></div>
+            <p id="skor">skor: 0</p>
+        </div>
+        <div class="soal"></div>
+        <div class="buahan"></div>
+        <div class="jawaban"></div>
+        <div class="respon"></div>
+        <button id="next">Mulai</button>
+    </div>
+
+    <script>
+        const buah = ["🍎", "🍏", "🍐", "🍊", "🍋", "🍌", "🍉", "🍓", "🥭", "🍍", "🥝", "🍅"]
+
+        let index = 0
+        const soal = document.querySelector('.soal')
+        const jawaban = document.querySelector('.jawaban')
+        const next = document.querySelector('#next')
+        const infoLevel = document.querySelector('#level')
+        const infoSkor = document.querySelector('#skor')
+        const respon = document.querySelector('.respon')
+        const buahan = document.querySelector('.buahan')
+        let level = 1
+        let skor = 0
+        let level_1 = [2, 3, 4, 5, 6, 7]
+        let level_2 = [5, 6, 7, 8, 9, 10]
+        let level_3 = [8, 9, 10, 11, 12, 13]
+        let level_4 = [10, 11, 12, 13, 14, 15]
+        let soal_acak = []
+        let index_soal = 0
+        const tingkat = document.querySelector('#tingkat')
+
+        tingkat.addEventListener('change', () => {
+            level = parseInt(tingkat.value)
+            infoLevel.textContent = `🚀Level: ${level}`
+            index_soal = 0
+            soal_acak = cekLevel(level)
+            next.textContent = `level ${level}`
+            next.classList.remove('hilang')
+        })
+
+        next.addEventListener('click', () => {
+            respon.textContent = ''
+            jawaban.textContent = ''
+            buahan.textContent = ''
+            if (index_soal == 0) {
+                soal_acak = cekLevel(level)
+            }
+            if (index_soal < soal_acak.length) {
+                speak("Hitunglah jumlah buah berikut ini!")
+                next.textContent = 'Next'
+                next.classList.add('hilang')
+                const jumlah = soal_acak[index_soal]
+                const tampilan = tampilanBuah(jumlah)
+
+                buahan.innerHTML = tampilan
+                const pilihan = [
+                    jumlah,
+                    jumlah + 1,
+                    jumlah - 1
+                ].sort(() => Math.random() - 0.5);
+
+                pilihan.forEach(p => {
+                    if (p > 0) {
+                        const btn = document.createElement("button");
+                        btn.textContent = p;
+                        btn.onclick = () => cekJawaban(p, jumlah);
+                        jawaban.appendChild(btn);
+                    }
+                });
+                index_soal++
+            } else {
+                level++
+                infoLevel.textContent = `Level: ${level}`
+                index_soal = 0
+                soal_acak = cekLevel(level)
+                next.textContent = `level ${level}`
+                speak(`Selamat Anda naik ke level ${level}, ayo kita lanjutkan permainannya!`)
+                if (level > 4) {
+                    next.textContent = 'Selesai'
+                    soal.textContent = 'Selamat Anda Telah Menyelesaikan Semua Level'
+                    speak("Selamat Anda telah menyelesaikan semua level, terima kasih telah bermain!")
+                    jawaban.textContent = ''
+                    next.disabled = true
+                }
+            }
+        })
+
+
+        function cekLevel(lev) {
+            let temp = []
+            if (lev == 1) {
+                temp = level_1
+            } else if (lev == 2) {
+                temp = level_2
+            } else if (lev == 3) {
+                temp = level_3
+            } else if (lev == 4) {
+                temp = level_4
+            }
+            return shuffleArray(temp)
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                // Tukar elemen
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        async function cekJawaban(pilihan, benar) {
+            if (pilihan === benar) {
+                skor++
+                infoSkor.textContent = `skor: ${skor}`
+                respon.textContent = '👍Jawaban Benar!'
+                await speak(`benar, jawabannya ${benar}`)
+                next.click()
+            }
+            else {
+                respon.textContent = 'Jawaban Salah!'
+                await speak("Jawaban salah, coba lagi!")
+            }
+
+        }
+
+        function tampilanBuah(jumlah) {
+            let tampilan = ""
+            let jenis = buah[Math.floor(Math.random() * buah.length)]
+            for (let i = 0; i < jumlah; i++) {
+                tampilan += `<div>${jenis}</div>`
+            }
+            return tampilan
+        }
+
+
+        function speak(text) {
+            return new Promise((resolve) => {
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = "id-ID";
+                u.rate = 1;
+                u.pitch = 1;
+                u.volume = 1;
+
+                u.onend = () => {
+                    resolve(); // selesai berbicara
+                };
+
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            });
+        }
+
+        speak("Halo ibrahim abdulah haris. selamat datang di permainan menghitung, silahkan klik tombol mulai untuk memulai permainan")
+
+
+
+    </script>
+</body>
+
+</html>

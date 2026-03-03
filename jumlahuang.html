@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .laybox{
+            display: grid;
+            grid-template-columns: 1fr 100px;
+            gap: 20px;
+            align-items: center;
+            margin-top: 20px;
+            width: 100%;
+            border:1px solid #ccc;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+        }
+        .laybox>img{
+            height: 100px;
+        }
+        .boxuang{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            
+        }
+        .boxuang img{
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <h1>Brand</h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tambah.html">Penjumlahan</a></li>
+            <li><a href="kurang.html">Pengurangan</a></li>
+            <li><a href="uang.html">Uang</a></li>
+            <li><a href="jumlahuang.html" class="active">Jumlah Uang</a></li>
+        </ul>
+    </div>
+    <div class="layout">
+        <h2>Ayo Kita menghitung</h2>
+        <div class="info">
+            <p id="level">Level: 1</p>
+            <div><select name="tingkat" id="tingkat">
+                    <option value="">Pilih Level</option>
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                    <option value="3">Level 3</option>
+                    <option value="4">Level 4</option>
+                </select></div>
+            <p id="skor">skor: 0</p>
+        </div>
+        <div class="soal"></div>
+        <div class="buahan">
+        </div>
+        <div class="beri hilang">
+            <button id="btnberi">Berikan Uang</button>
+        </div>
+        <div class="laybox hilang">
+            <div class="boxuang"></div>
+            <img src="anak.png" alt="">
+        </div>
+        
+        <div class="jawaban"></div>
+        <div class="respon"></div>
+        <button id="next">Mulai</button>
+    </div>
+
+
+    <script>
+        const uang=[
+            {1000:'1ribu'},        
+            {2000:'2ribu'},
+            {5000:'5ribu'},
+            {10000:'10ribu'},
+            {20000:'20ribu'},
+            {50000:'50ribu'},
+            {100000:'100ribu'}
+        ]
+        uangArray = [2000,5000,10000,20000,50000,100000]
+        const levelData = {
+            1: [2000,3000,4000,6000,7000,8000],
+            2: [9000,10000,11000,12000,13000,14000],
+            3: [15000,16000,17000,18000,19000,20000],
+            4: [50000,60000,70000,80000,90000,150000]
+        };
+        let index = 0
+        const soal = document.querySelector('.soal')
+        const jawaban = document.querySelector('.jawaban')
+        const next = document.querySelector('#next')
+        const infoLevel = document.querySelector('#level')
+        const infoSkor = document.querySelector('#skor')
+        const respon = document.querySelector('.respon')
+        const buahan = document.querySelector('.buahan')
+        const boxuang = document.querySelector('.boxuang')
+        const btnberi = document.querySelector('#btnberi')
+        const beridiv = document.querySelector('.beri')
+
+        
+        let level = 1
+        let skor = 0
+        let soal_acak = []
+        let index_soal = 0
+        const tingkat = document.querySelector('#tingkat')
+
+        tingkat.addEventListener('change', () => {
+            level = parseInt(tingkat.value)
+            infoLevel.textContent = `🚀Level: ${level}`
+            index_soal = 0
+            soal_acak = cekLevel(level)
+            next.textContent = `level ${level}`
+            next.classList.remove('hilang')
+            beridiv.classList.add('hilang')
+            boxuang.innerHTML = ''
+            document.querySelector('.laybox').classList.add('hilang')
+            buahan.innerHTML = ''
+             respon.textContent = ''
+             jawaban.textContent = ''
+        })
+
+        buahan.addEventListener('click', (e) => {
+            if(e.target.tagName === 'IMG'){
+                console.log(e.target.cloneNode())
+                const pilihan = parseInt(e.target.dataset.nominal)
+                const benar = soal_acak[index_soal-1]
+                boxuang.appendChild(e.target.cloneNode())
+            }
+        })
+
+        boxuang.addEventListener('click', (e) => {
+            if(e.target.tagName === 'IMG'){
+                boxuang.removeChild(e.target)
+            }
+        })
+
+        btnberi.addEventListener('click',()=>{
+            const pilihan = boxuang.querySelectorAll('img')
+            let total = 0
+            pilihan.forEach(el=>{
+                total += parseInt(el.dataset.nominal)
+            })
+            const benar = soal_acak[index_soal-1]
+            cekJawaban(total, benar)
+        })
+
+        next.addEventListener('click', () => {
+            respon.textContent = ''
+            jawaban.textContent = ''
+            beridiv.classList.remove('hilang')
+            boxuang.innerHTML = ''
+            document.querySelector('.laybox').classList.remove('hilang')
+             if (index_soal == 0) {
+                soal_acak = cekLevel(level)
+                const tampilan = tampilanUang(uang)
+                buahan.innerHTML = tampilan
+             }
+             if (index_soal < soal_acak.length) {
+                next.textContent = 'Next'
+                soal.textContent = `Berikan uang sebanyak ${soal_acak[index_soal]} rupiah`
+                next.classList.add('hilang')
+                const jumlah = soal_acak[index_soal]                
+                speak(`berilah anak tersebut uang sebanyak ${jumlah} rupiah?`)         
+                index_soal++
+            }else{
+                level++
+                infoLevel.textContent = `🚀Level: ${level}`
+                index_soal = 0
+                soal_acak = cekLevel(level)
+                next.textContent = `level ${level}`
+                next.classList.remove('hilang')
+                speak(`Selamat Anda naik ke level ${level}, silahkan klik tombol dibawah untuk melanjutkan permainannya!`)
+                if (level > 4) {
+                    next.textContent = 'Selesai'
+                    soal.textContent = 'Selamat Anda Telah Menyelesaikan Semua Level'
+                    speak("Selamat Anda telah menyelesaikan semua level, terima kasih telah bermain!")
+                    jawaban.textContent = ''
+                    next.disabled = true
+                }
+            }
+            
+        })
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                // Tukar elemen
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function tampilanUang(uArr) {
+            let tampilan = ""
+            for (let i = 0; i < uArr.length; i++) {
+                tampilan += `<img src="uang/${Object.values(uArr[i])}.jpg" data-nominal="${Object.keys(uArr[i])}" alt="${Object.values(uArr[i])}">`
+            }
+            console.log(tampilan)
+            return tampilan
+        }
+
+         function speak(text) {
+            return new Promise((resolve) => {
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = "id-ID";
+                u.rate = 1;
+                u.pitch = 1;
+                u.volume = 1;
+
+                u.onend = () => {
+                    resolve(); // selesai berbicara
+                };
+
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            });
+        }
+
+        async function cekJawaban(pilihan, benar) {
+            if (pilihan === benar) {
+                skor++
+                infoSkor.textContent = `🎯skor: ${skor}`
+                respon.textContent = "✅"
+                await speak("hebat, jawaban kamu benar!")
+                next.click()
+            }
+            else {
+                if(pilihan > benar){
+                    respon.textContent = "Jawaban terlalu banyak!"
+                    await speak(`kamu memberikan uang ${pilihan} rupiah, terlalu banyak, coba kurangi!`)
+                }else{
+                    respon.textContent = "Jawaban terlalu sedikit!"
+                    await speak(`kamu memberikan uang ${pilihan} rupiah, terlalu sedikit, coba tambahkan!`)
+                }
+                respon.textContent = "❌"
+                await speak(`coba lagi!, berikan uang sebanyak ${benar} rupiah!`)
+            }
+
+        }
+
+        function cekLevel(lev) {
+            let temp = []
+            if (lev == 1) {
+                temp = levelData[1]
+            } else if (lev == 2) {
+                temp =  levelData[2]
+            } else if (lev == 3) {
+                temp = levelData[3]
+            } else if (lev == 4) {
+                temp = levelData[4]
+            }
+            return shuffleArray(temp)
+        }
+
+    </script>
+</body>
+
+</html>

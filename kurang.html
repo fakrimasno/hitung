@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    .buah {
+        cursor: pointer;
+    }
+
+    .emoji-box {
+        position: relative;
+        display: inline-block;
+        font-size: 50px;
+    }
+    .emoji-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+    .emoji-box.tranparent .emoji-base {
+        opacity: 0.3;
+        /* transparan */
+    }
+    .emoji-box.tranparent .emoji-overlay {
+        opacity: 1;
+    }
+
+  
+
+    
+</style>
+
+<body>
+    <div class="navbar">
+        <h1>Brand</h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tambah.html">Penjumlahan</a></li>
+            <li><a href="kurang.html" class="active">Pengurangan</a></li>
+            <li><a href="uang.html">Uang</a></li>
+            <li><a href="jumlahuang.html">Jumlah Uang</a></li>
+        </ul>
+    </div>
+    <div class="layout">
+        <h2>Ayo Kita menghitung</h2>
+        <div class="info">
+            <p id="level">🚀Level: 1</p>
+            <div><select name="tingkat" id="tingkat">
+        <option value="">Pilih Level</option>
+        <option value="1">Level 1</option>
+        <option value="2">Level 2</option>
+        <option value="3">Level 3</option>
+        <option value="4">Level 4</option>
+    </select></div>
+            <p id="skor">🎯skor: 0</p>
+        </div>
+        <div class="soal"></div>
+        <div class="buahan">
+            <div class="kiri"></div>
+            <div class="kanan"></div>
+        </div>
+        <div class="jawaban"></div>
+        <div class="respon"></div>
+        <button id="next">Mulai</button>
+
+        
+    </div>
+
+    
+
+
+    <script>
+        const buah = ["🍎", "🍏", "🍐", "🍊", "🍋", "🍌", "🍉", "🍓", "🥭", "🍍", "🥝", "🍅"]
+        let index = 0
+        const soal = document.querySelector('.soal')
+        const jawaban = document.querySelector('.jawaban')
+        const next = document.querySelector('#next')
+        const infoLevel = document.querySelector('#level')
+        const infoSkor = document.querySelector('#skor')
+        const respon = document.querySelector('.respon')
+        const buahan = document.querySelector('.buahan')
+        const tingkat = document.querySelector('#tingkat')
+        let level = 1
+        let skor = 0
+        let soal_acak = []
+        let index_soal = 0
+
+        tingkat.addEventListener('change', () => {
+            level = parseInt(tingkat.value)
+            infoLevel.textContent = `🚀Level: ${level}`
+            index_soal = 0
+            soal_acak = cekLevel(level)
+            next.textContent = `level ${level}`
+            next.classList.remove('hilang')
+        })
+
+        
+
+        const levelData = {
+            1: [[2, 1], [3, 1], [3, 2], [4, 1], [4, 2], [4, 3], [5, 1], [5, 2], [5, 3], [5, 4], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6]],
+            2: [[5, 2], [6, 2], [6, 3], [7, 2], [7, 3], [7, 4], [8, 2], [8, 3], [8, 4], [8, 5], [9, 2], [9, 3], [9, 4], [9, 5], [9, 6], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7]],
+            3: [[7, 4], [8, 4], [8, 5], [9, 4], [9, 5], [9, 6], [10, 4], [10, 5], [10, 6], [10, 7], [11, 4], [11, 5], [11, 6], [11, 7], [12, 4], [12, 5], [12, 6], [12, 7]],
+            4: [[11, 5], [12, 5], [12, 6], [13, 5], [13, 6], [13, 7], [14, 5], [14, 6], [14, 7], [14, 8], [15, 5], [15, 6], [15, 7], [15, 8], [15, 9]]
+        };
+
+        next.addEventListener('click', () => {
+            respon.textContent = ''
+            jawaban.textContent = ''
+            buahan.textContent = ''
+            if (index_soal == 0) {
+                console.log('cek level')
+                soal_acak = cekLevel(level)
+                console.log(soal_acak)
+            }
+            if (index_soal < soal_acak.length) {
+                console.log('ative soal')
+                next.textContent = 'Next'
+                next.classList.add('hilang')
+                const soaltampil = soal_acak[index_soal]
+                const jumlah = soaltampil[0] - soaltampil[1]
+                soal.innerHTML = `${soaltampil[0]} - ${soaltampil[1]} =?`
+                //const tampilan=`<div class="kiri">${tampilanBuah(soaltampil[0])}<span class="angka">${soaltampil[0]}</span></div><div>+</div><div class="kanan">${tampilanBuah(soaltampil[1])}<span class="angka">${soaltampil[1]}</div>`
+                const tampilan = tampilanBuah(soaltampil[0])
+                buahan.innerHTML = tampilan
+                //soal.innerHTML = `${soaltampil[0]} + ${soaltampil[1]} =?`
+                speak(`berapakah ${soaltampil[0]} dikurangi ${soaltampil[1]}?`)
+                let pilihan = []
+                if (jumlah < 2) {
+                    pilihan = [
+                    jumlah,
+                    jumlah + 1,
+                    jumlah + 2
+                ].sort(() => Math.random() - 0.5);
+                
+                }else{
+                    pilihan = [
+                    jumlah,
+                    jumlah + 1,
+                    jumlah - 1
+                ].sort(() => Math.random() - 0.5);
+                }
+                
+                pilihan.forEach(p => {
+                    if (p > 0) {
+                        const btn = document.createElement("button");
+                        btn.textContent = p;
+                        btn.onclick = () => cekJawaban(p, jumlah);
+                        jawaban.appendChild(btn);
+                    }
+                });
+                index_soal++
+            } else {
+                level++
+                infoLevel.textContent = `🚀Level: ${level}`
+                index_soal = 0
+                soal_acak = cekLevel(level)
+                next.textContent = `level ${level}`
+                next.classList.remove('hilang')
+                tingkat.value = level
+                speak(`Selamat Anda naik ke level ${level}, silahkan klik tombol dibawah untuk melanjutkan permainannya!`)
+                if (level > 4) {
+                    next.textContent = 'Selesai'
+                    soal.textContent = 'Selamat Anda Telah Menyelesaikan Semua Level'
+                    speak("Selamat Anda telah menyelesaikan semua level, terima kasih telah bermain!")
+                    jawaban.textContent = ''
+                    next.disabled = true
+                }
+            }
+        })
+
+
+        buahan.addEventListener('click', (e) => {
+            const box = e.target.closest(".emoji-box");
+            if (!box) return; // bukan klik emoji-box
+            console.log("Yang diklik:", box)
+            box.classList.toggle("tranparent")
+        })
+
+
+
+
+        function cekLevel(lev) {
+            let temp = []
+            if (lev == 1) {
+                temp = levelData[1]
+            } else if (lev == 2) {
+                temp = levelData[2]
+            } else if (lev == 3) {
+                temp = levelData[3]
+            } else if (lev == 4) {
+                temp = levelData[4]
+            }
+            return shuffleArray(temp)
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                // Tukar elemen
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function tampilanBuah(jumlah) {
+            let tampilan = ""
+            let jenis = buah[Math.floor(Math.random() * buah.length)]
+            for (let i = 0; i < jumlah; i++) {
+                tampilan += `<div class="emoji-box">
+  <span class="emoji-base">${jenis}</span>
+  <span class="emoji-overlay">❌</span>
+</div>`
+            }
+            return tampilan
+        }
+
+        function speak(text) {
+            return new Promise((resolve) => {
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = "id-ID";
+                u.rate = 1;
+                u.pitch = 1;
+                u.volume = 1;
+
+                u.onend = () => {
+                    resolve(); // selesai berbicara
+                };
+
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            });
+        }
+
+        async function cekJawaban(pilihan, benar) {
+            if (pilihan === benar) {
+                skor++
+                infoSkor.textContent = `🎯skor: ${skor}`
+                respon.textContent = "✅"
+                await speak(`benar, jawabannya ${benar}`)
+                next.click()
+            }
+            else {
+                respon.textContent = "❌"
+                await speak("Jawaban salah, coba lagi!")
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>

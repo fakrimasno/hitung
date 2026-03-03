@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <h1>Brand</h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tambah.html">Penjumlahan</a></li>
+            <li><a href="kurang.html">Pengurangan</a></li>
+            <li><a href="uang.html" class="active">Uang</a></li>
+            <li><a href="jumlahuang.html">Jumlah Uang</a></li>
+        </ul>
+    </div>
+    <div class="layout">
+        <h2>Ayo Kita menghitung</h2>
+        <div class="info">
+            <p id="level">Level: 1</p>
+            <div><select name="tingkat" id="tingkat">
+                    <option value="">Pilih Level</option>
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                    <option value="3">Level 3</option>
+                    <option value="4">Level 4</option>
+                </select></div>
+            <p id="skor">skor: 0</p>
+        </div>
+        <div class="soal"></div>
+        <div class="buahan">
+            <div class="kiri"></div>
+            <div class="kanan"></div>
+        </div>
+        <div class="jawaban"></div>
+        <div class="respon"></div>
+        <button id="next">Mulai</button>
+    </div>
+
+
+    <script>
+        const uang=[
+            {1000:'1ribu'},        
+            {2000:'2ribu'},
+            {5000:'5ribu'},
+            {10000:'10ribu'},
+            {20000:'20ribu'},
+            {50000:'50ribu'},
+            {100000:'100ribu'}
+        ]
+        uangArray = [1000,2000,5000,10000,20000,50000,100000]
+        let index = 0
+        const soal = document.querySelector('.soal')
+        const jawaban = document.querySelector('.jawaban')
+        const next = document.querySelector('#next')
+        const infoLevel = document.querySelector('#level')
+        const infoSkor = document.querySelector('#skor')
+        const respon = document.querySelector('.respon')
+        const buahan = document.querySelector('.buahan')
+
+        
+        let level = 1
+        let skor = 0
+        let soal_acak = []
+        let index_soal = 0
+        const tingkat = document.querySelector('#tingkat')
+
+        buahan.addEventListener('click', (e) => {
+            if(e.target.tagName === 'IMG'){
+                const pilihan = parseInt(e.target.dataset.nominal)
+                const benar = soal_acak[index_soal-1]
+                console.log(pilihan,benar)
+                cekJawaban(pilihan, benar)
+            }
+        })
+        
+
+        next.addEventListener('click', () => {
+            respon.textContent = ''
+            jawaban.textContent = ''
+             if (index_soal == 0) {
+                soal_acak = shuffleArray(uangArray)
+                const tampilan = tampilanUang(uang)
+                buahan.innerHTML = tampilan
+             }
+             if (index_soal < soal_acak.length) {
+                next.textContent = 'Next'
+                next.classList.add('hilang')
+                const jumlah = soal_acak[index_soal]      
+                soal.textContent = `Manakah yang merupakan uang ${jumlah} rupiah?`          
+                speak(`manakah yang merupakan uang ${jumlah} rupiah?`)               
+                
+                index_soal++
+            }else{
+                next.textContent = 'Selesai'
+                speak(`selamat kamu sudah menyelesaikan semua soal dengan skor ${skor}`)
+            }
+            
+        })
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                // Tukar elemen
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function tampilanUang(uArr) {
+            let tampilan = ""
+            for (let i = 0; i < uArr.length; i++) {
+                tampilan += `<img src="uang/${Object.values(uArr[i])}.jpg" data-nominal="${Object.keys(uArr[i])}" alt="${Object.values(uArr[i])}">`
+            }
+            console.log(tampilan)
+            return tampilan
+        }
+
+         function speak(text) {
+            return new Promise((resolve) => {
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = "id-ID";
+                u.rate = 1;
+                u.pitch = 1;
+                u.volume = 1;
+
+                u.onend = () => {
+                    resolve(); // selesai berbicara
+                };
+
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            });
+        }
+
+        async function cekJawaban(pilihan, benar) {
+            if (pilihan === benar) {
+                skor++
+                infoSkor.textContent = `🎯skor: ${skor}`
+                respon.textContent = "✅"
+                await speak("hebat, jawaban kamu benar!")
+                next.click()
+            }
+            else {
+                respon.textContent = "❌"
+                await speak("Jawaban salah, coba lagi!")
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
