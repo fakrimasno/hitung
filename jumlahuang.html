@@ -34,18 +34,29 @@
 </head>
 
 <body>
-    <div class="navbar">
-        <h1>Brand</h1>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="tambah.html">Penjumlahan</a></li>
-            <li><a href="kurang.html">Pengurangan</a></li>
-            <li><a href="uang.html">Uang</a></li>
-            <li><a href="jumlahuang.html" class="active">Jumlah Uang</a></li>
-        </ul>
-    </div>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="#">Logo</a>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tambah.html">Penjumlahan</a></li>
+                <li><a href="kurang.html">Pengurangan</a></li>
+                <li><a href="uang.html">Uang</a></li>
+                <li><a href="jumlahuang.html" class="active">Beri_uang</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
     <div class="layout">
-        <h2>Ayo Kita menghitung</h2>
+        <h2>Menghitung Jumlah Uang</h2>
         <div class="info">
             <p id="level">Level: 1</p>
             <div><select name="tingkat" id="tingkat">
@@ -61,7 +72,7 @@
         <div class="buahan">
         </div>
         <div class="beri hilang">
-            <button id="btnberi">Berikan Uang</button>
+            <button id="btnberi">Berikan</button>
         </div>
         <div class="laybox hilang">
             <div class="boxuang"></div>
@@ -73,7 +84,7 @@
         <button id="next">Mulai</button>
     </div>
 
-
+    <script src="script.js"></script>
     <script>
         const uang=[
             {1000:'1ribu'},        
@@ -127,7 +138,6 @@
 
         buahan.addEventListener('click', (e) => {
             if(e.target.tagName === 'IMG'){
-                console.log(e.target.cloneNode())
                 const pilihan = parseInt(e.target.dataset.nominal)
                 const benar = soal_acak[index_soal-1]
                 boxuang.appendChild(e.target.cloneNode())
@@ -158,8 +168,7 @@
             document.querySelector('.laybox').classList.remove('hilang')
              if (index_soal == 0) {
                 soal_acak = cekLevel(level)
-                const tampilan = tampilanUang(uang)
-                buahan.innerHTML = tampilan
+                
              }
              if (index_soal < soal_acak.length) {
                 next.textContent = 'Next'
@@ -167,6 +176,8 @@
                 next.classList.add('hilang')
                 const jumlah = soal_acak[index_soal]                
                 speak(`berilah anak tersebut uang sebanyak ${jumlah} rupiah?`)         
+                const tampilan = tampilanUang(uang)
+                buahan.innerHTML = tampilan
                 index_soal++
             }else{
                 level++
@@ -226,21 +237,22 @@
             if (pilihan === benar) {
                 skor++
                 infoSkor.textContent = `🎯skor: ${skor}`
-                respon.textContent = "✅"
+                buahan.innerHTML = "👍 benar"
                 await speak("hebat, jawaban kamu benar!")
                 next.click()
             }
             else {
+                buahan.innerHTML = "❌"
                 if(pilihan > benar){
-                    respon.textContent = "Jawaban terlalu banyak!"
                     await speak(`kamu memberikan uang ${pilihan} rupiah, terlalu banyak, coba kurangi!`)
                 }else{
-                    respon.textContent = "Jawaban terlalu sedikit!"
                     await speak(`kamu memberikan uang ${pilihan} rupiah, terlalu sedikit, coba tambahkan!`)
-                }
-                respon.textContent = "❌"
+                }                
+                buahan.innerHTML = tampilanUang(uang)
+                boxuang.innerHTML = ''
                 await speak(`coba lagi!, berikan uang sebanyak ${benar} rupiah!`)
             }
+
 
         }
 

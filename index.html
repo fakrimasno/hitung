@@ -7,20 +7,61 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<style>
 
 
+    .emoji-box {
+        position: relative;
+        display: inline-block;
+        font-size: 50px;
+        cursor: pointer;
+    }
+    .emoji-base{
+        opacity: 0.7;
+        
+    }
+
+    .emoji-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+    }
+
+    .emoji-box.tranparent .emoji-base {
+        opacity: 1;
+        /* transparan */
+    }
+
+    .emoji-box.tranparent .emoji-overlay {
+        opacity: 0;
+    }
+</style>
 <body>
 
-    <div class="navbar">
-        <h1>Brand</h1>
-        <ul>
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="tambah.html">Penjumlahan</a></li>
-            <li><a href="kurang.html">Pengurangan</a></li>
-            <li><a href="uang.html">Uang</a></li>
-            <li><a href="jumlahuang.html">Jumlah Uang</a></li>
-        </ul>
-    </div>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="#">Logo</a>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="tambah.html">Penjumlahan</a></li>
+                <li><a href="kurang.html">Pengurangan</a></li>
+                <li><a href="uang.html">Uang</a></li>
+                <li><a href="jumlahuang.html">Beri_uang</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
     <div class="layout">
         <h2>Ayo Kita menghitung</h2>
         <div class="info">
@@ -40,6 +81,7 @@
         <div class="respon"></div>
         <button id="next">Mulai</button>
     </div>
+    <script src="script.js"></script>
 
     <script>
         const buah = ["🍎", "🍏", "🍐", "🍊", "🍋", "🍌", "🍉", "🍓", "🥭", "🍍", "🥝", "🍅"]
@@ -63,6 +105,9 @@
         const tingkat = document.querySelector('#tingkat')
 
         tingkat.addEventListener('change', () => {
+            respon.textContent = ''
+            jawaban.textContent = ''
+            buahan.textContent = ''
             level = parseInt(tingkat.value)
             infoLevel.textContent = `🚀Level: ${level}`
             index_soal = 0
@@ -107,6 +152,7 @@
                 index_soal = 0
                 soal_acak = cekLevel(level)
                 next.textContent = `level ${level}`
+                next.classList.remove('hilang')
                 speak(`Selamat Anda naik ke level ${level}, ayo kita lanjutkan permainannya!`)
                 if (level > 4) {
                     next.textContent = 'Selesai'
@@ -116,6 +162,12 @@
                     next.disabled = true
                 }
             }
+        })
+        buahan.addEventListener('click', (e) => {
+            const box = e.target.closest(".emoji-box");
+            if (!box) return; // bukan klik emoji-box
+            console.log("Yang diklik:", box)
+            box.classList.toggle("tranparent")
         })
 
 
@@ -144,9 +196,12 @@
 
         async function cekJawaban(pilihan, benar) {
             if (pilihan === benar) {
+                soal.innerHTML = ''
+                buahan.textContent = ''
+                jawaban.textContent = ''
                 skor++
-                infoSkor.textContent = `skor: ${skor}`
-                respon.textContent = '👍Jawaban Benar!'
+                infoSkor.textContent = `🎯skor: ${skor}`
+                respon.textContent = "👍  " + benar
                 await speak(`benar, jawabannya ${benar}`)
                 next.click()
             }
@@ -161,7 +216,10 @@
             let tampilan = ""
             let jenis = buah[Math.floor(Math.random() * buah.length)]
             for (let i = 0; i < jumlah; i++) {
-                tampilan += `<div>${jenis}</div>`
+                tampilan += `<div class="emoji-box">
+  <span class="emoji-base">${jenis}</span>
+  <span class="emoji-overlay">✅</span>
+</div>`
             }
             return tampilan
         }

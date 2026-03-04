@@ -9,18 +9,29 @@
 </head>
 
 <body>
-    <div class="navbar">
-        <h1>Brand</h1>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="tambah.html">Penjumlahan</a></li>
-            <li><a href="kurang.html">Pengurangan</a></li>
-            <li><a href="uang.html" class="active">Uang</a></li>
-            <li><a href="jumlahuang.html">Jumlah Uang</a></li>
-        </ul>
-    </div>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="#">Logo</a>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tambah.html">Penjumlahan</a></li>
+                <li><a href="kurang.html">Pengurangan</a></li>
+                <li><a href="uang.html" class="active">Uang</a></li>
+                <li><a href="jumlahuang.html">Beri_uang</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
     <div class="layout">
-        <h2>Ayo Kita menghitung</h2>
+        <h2>Tebak Uang</h2>
         <div class="info">
             <p id="level">Level: 1</p>
             <div><select name="tingkat" id="tingkat">
@@ -42,7 +53,7 @@
         <button id="next">Mulai</button>
     </div>
 
-
+    <script src="script.js"></script>
     <script>
         const uang=[
             {1000:'1ribu'},        
@@ -85,8 +96,7 @@
             jawaban.textContent = ''
              if (index_soal == 0) {
                 soal_acak = shuffleArray(uangArray)
-                const tampilan = tampilanUang(uang)
-                buahan.innerHTML = tampilan
+                
              }
              if (index_soal < soal_acak.length) {
                 next.textContent = 'Next'
@@ -94,7 +104,8 @@
                 const jumlah = soal_acak[index_soal]      
                 soal.textContent = `Manakah yang merupakan uang ${jumlah} rupiah?`          
                 speak(`manakah yang merupakan uang ${jumlah} rupiah?`)               
-                
+                const tampilan = tampilanUang(uang)
+                buahan.innerHTML = tampilan
                 index_soal++
             }else{
                 next.textContent = 'Selesai'
@@ -140,15 +151,19 @@
 
         async function cekJawaban(pilihan, benar) {
             if (pilihan === benar) {
+                buahan.innerHTML = ''
+                soal.innerHTML = ''
                 skor++
                 infoSkor.textContent = `🎯skor: ${skor}`
-                respon.textContent = "✅"
+                respon.textContent = '👍Jawaban Benar!'
+                respon.innerHTML += ` <br> Ini adalah uang ${benar} rupiah<br><br><img width="300" src="uang/${Object.values(uang.find(u => parseInt(Object.keys(u)) === benar))}.jpg" alt="${Object.values(uang.find(u => parseInt(Object.keys(u)) === benar))}">`
+
                 await speak("hebat, jawaban kamu benar!")
                 next.click()
             }
             else {
                 respon.textContent = "❌"
-                await speak("Jawaban salah, coba lagi!")
+                speak(`manakah yang merupakan uang ${benar} rupiah?`)
             }
 
         }
