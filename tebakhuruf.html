@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>huruf</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <style>
+        #hurufmodal {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            padding: 15px 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #hurufmodal div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .huruf-option.selected {
+            background-color: #ee7829;
+            color: #fff;
+            border-color: #ee7829;
+        }
+
+        #preview {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            flex-wrap: wrap;
+            border: 1px solid #ccc;
+            justify-content: center;
+        }
+
+        .huruf-prev {
+            color: #e2e8f0;
+            width: 50px;
+            height: 50px;
+            background-color: rgb(55, 161, 191);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            border-radius: 4px;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .huruf-prev:active {
+            background-color: rgb(31 118 142);
+            transform: scale(0.9);
+        }
+
+        #mulai {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ee7829;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #mulai:active {
+            background-color: #d96b1f;
+            transform: scale(0.95);
+        }
+
+        .subheader {
+            width: 95%;
+            margin-inline: auto;
+            background: #ffffff;
+            border-radius: 80px;
+            padding: 0.6rem 1.2rem 0.6rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(203, 213, 225, 0.6);
+            transition: all 0.25s ease;
+
+        }
+
+        .menulevel {
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Modern select dropdown styling */
+        .menulevel select {
+            background-color: #f9fbfe;
+            border: 1px solid #e2e8f0;
+            border-radius: 60px;
+            padding: 0.65rem 2.2rem 0.65rem 1.3rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1e2f3e;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(2px);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234b6b8a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+        }
+
+        .menulevel select:hover {
+            border-color: #b9ccdf;
+            background-color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .menulevel select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Styling for options */
+        .menulevel select option {
+            font-weight: normal;
+            background: white;
+            color: #1e2f3e;
+            padding: 0.5rem;
+        }
+
+        /* Setting button styling */
+        #openDialogBtn {
+            background: linear-gradient(105deg, #1e3a5f, #143857);
+            border: none;
+            padding: 0.65rem 1.6rem;
+            border-radius: 60px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.3px;
+        }
+
+        #openDialogBtn:hover {
+            background: linear-gradient(105deg, #0f3554, #0b2a44);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px -6px rgba(0, 55, 80, 0.3);
+        }
+
+        #openDialogBtn:active {
+            transform: translateY(1px);
+            transition: 0.05s;
+        }
+
+        dialog {
+            border: none;
+            padding: 0;
+            background: transparent;
+            width: min(90vw, 500px);
+            animation: fadeOut 0.2s ease;
+        }
+
+        dialog[open] {
+            animation: fadeSlideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            animation: backdropFade 0.2s ease;
+        }
+
+        @keyframes backdropFade {
+            from {
+                background: rgba(0, 0, 0, 0);
+                backdrop-filter: blur(0);
+            }
+
+            to {
+                background: rgba(0, 0, 0, 0.6);
+                backdrop-filter: blur(5px);
+            }
+        }
+
+        /* Modal Card */
+        .modal-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        /* Modal Header */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: linear-gradient(105deg, #1e3a5f, #143857);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.2px;
+        }
+
+        .close-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .close-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Modal Body */
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .btn-pri {
+            background: linear-gradient(105deg, #1e3a5f, #143857);
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-pri:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-pri:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="keranjang.png" alt="">
+            </div>
+            <div class="laysubmenu">
+                <div class="dropdown">
+                    <button class="dropbtn" onclick="show(this)">
+                        <span>Berhitung</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#5f6368">
+                            <path d="M480-360 280-560h400L480-360Z" />
+                        </svg></button>
+                    <div class="dropdown-content">
+                        <div>
+                            <ul>
+                                <li><a href="index.html" class="active">🔢Hitung Buah</a></li>
+                                <li><a href="tambah.html">➕Penjumlahan</a></li>
+                                <li><a href="kurang.html">➖Pengurangan</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button class="dropbtn" onclick="show(this)">
+                        <span>Uang</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#5f6368">
+                            <path d="M480-360 280-560h400L480-360Z" />
+                        </svg>
+                    </button>
+
+                    <div class="dropdown-content">
+                        <div>
+                            <ul>
+                                <li><a href="uang.html">💸Tebak Uang</a></li>
+                                <li><a href="jmluang.html">💰Jumlah Uang</a></li>
+                                <li><a href="beriuang.html">💰Beri Uang</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="dropdown">
+                    <button class="dropbtn" onclick="show(this)">
+                        <span>Huruf</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#5f6368">
+                            <path d="M480-360 280-560h400L480-360Z" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-content">
+                        <div>
+                            <ul>
+                                <li><a href="tebakhuruf.html">Tebak Huruf</a></li>
+                                <li><a href="ejakata.html">Eja Kata</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <h1>Tebak Huruf</h1>
+        <div class="subheader">
+            <div class="menulevel">
+                <select name="le" id="jenisfont">
+                    <option value="Arial">Arial</option>
+                    <option value="Poppins">Poppins</option>
+                </select>
+            </div>
+            <button id="openDialogBtn">🛠️ setting</button>
+            <div class="menulevel">
+                <select name="level" id="fontcase">
+                    <option value="upper">Kapital</option>
+                    <option value="lower">Kecil</option>
+                </select>
+            </div>
+        </div>
+        <div class="main-content">
+
+            <dialog id="sethuruf">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2>📋Pilih Huruf</h2>
+                        <button class="close-icon" id="closeDialogIcon" aria-label="Close dialog">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="hurufmodal">
+                            hi
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn-pri" id="confirmDialogBtn">Confirm action</button>
+                        </div>
+                    </div>
+                </div>
+            </dialog>
+            <div id="preview">
+
+            </div>
+            <div style="display: flex;justify-content: center; margin-top: 20px;">
+                <button id="mulai">🗣Mulai Berlatih</button>
+            </div>
+
+        </div>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        const semuaHuruf = [
+            { letter: "A", ucap: 'a', word: "Apel", emoji: "🍎" },
+            { letter: "B", ucap: 'b', word: "Becak", emoji: "🛺" },
+            { letter: "C", ucap: 'c', word: "Cicak", emoji: "🦎" },
+            { letter: "D", ucap: 'd', word: "Donat", emoji: "🍩" },
+            { letter: "E", ucap: 'e', word: "Elang", emoji: "🦅" },
+            { letter: "F", ucap: 'ef', word: "Flamingo", emoji: "🦩" },
+            { letter: "G", ucap: 'g', word: "Gajah", emoji: "🐘" },
+            { letter: "H", ucap: 'h', word: "Helikopter", emoji: "🚁" },
+            { letter: "I", ucap: 'i', word: "Ikan", emoji: "🐟" },
+            { letter: "J", ucap: 'j', word: "Jagung", emoji: "🌽" },
+            { letter: "K", ucap: 'k', word: "Kambing", emoji: "🐐" },
+            { letter: "L", ucap: 'l', word: "Lumba-lumba", emoji: "🐬" },
+            { letter: "M", ucap: 'm', word: "Mobil", emoji: "🚗" },
+            { letter: "N", ucap: 'n', word: "Nanas", emoji: "🍍" },
+            { letter: "O", ucap: 'o', word: "Orangutan", emoji: "🦧" },
+            { letter: "P", ucap: 'p', word: "Pisang", emoji: "🍌" },
+            { letter: "Q", ucap: 'q', word: "Qur'an", emoji: "📖" },
+            { letter: "R", ucap: 'r', word: "Rumah", emoji: "🏠" },
+            { letter: "S", ucap: 's', word: "Semangka", emoji: "🍉" },
+            { letter: "T", ucap: 't', word: "Tikus", emoji: "🐭" },
+            { letter: "U", ucap: 'u', word: "Ular", emoji: "🐍" },
+            { letter: "V", ucap: 'v', word: "Vas bunga", emoji: "🏺" },
+            { letter: "W", ucap: 'w', word: "Wortel", emoji: "🥕" },
+            { letter: "X", ucap: 'x', word: "X-Men", emoji: "🦸" },
+            { letter: "Y", ucap: 'y', word: "Yoyo", emoji: "🪀" },
+            { letter: "Z", ucap: 'z', word: "Zebra", emoji: "🦓" }
+        ];
+        const hurufmodal = document.getElementById("hurufmodal");
+        const openDialogBtn = document.getElementById("openDialogBtn");
+        const closeDialogIcon = document.getElementById("closeDialogIcon");
+        const sethurufDialog = document.getElementById("sethuruf");
+        const confirmDialogBtn = document.getElementById("confirmDialogBtn");
+        const preview = document.getElementById("preview");
+        const jenisfont = document.getElementById("jenisfont");
+        const fontcase = document.getElementById("fontcase");
+        const mulaiBtn = document.getElementById("mulai");
+        let indexSoal = 0;
+        let soal = [];
+
+
+        openDialogBtn.addEventListener("click", () => {
+            sethurufDialog.showModal();
+            const cekhuruf = document.querySelectorAll(".huruf-prev");
+            const arrHuruf = Array.from(cekhuruf).map(h => h.dataset.hurufprev);
+            let temp = "";
+            semuaHuruf.forEach(huruf => {
+                if (arrHuruf.includes(huruf.letter)) {
+                    temp += `<div class="huruf-option selected">${huruf.letter}</div>`;
+                } else {
+                    temp += `<div class="huruf-option">${huruf.letter}</div>`;
+                }
+
+            });
+            hurufmodal.innerHTML = temp;
+        });
+        closeDialogIcon.addEventListener("click", () => {
+            sethurufDialog.close();
+        });
+
+        hurufmodal.addEventListener("click", (e) => {
+            if (e.target.classList.contains("huruf-option")) {
+                e.target.classList.toggle("selected");
+            }
+        });
+
+        confirmDialogBtn.addEventListener("click", () => {
+            preview.innerHTML = "";
+            const selectedHurufs = document.querySelectorAll(".huruf-option.selected");
+            selectedHurufs.forEach(h => {
+                const div = document.createElement("div");
+                div.textContent = h.textContent;
+                div.dataset.hurufprev = h.textContent;
+                div.classList.add("huruf-prev");
+                preview.appendChild(div);
+
+            });
+            const selectedLetters = Array.from(selectedHurufs).map(h => h.textContent);
+            sethurufDialog.close();
+        });
+
+        function sebarhuruf() {
+            semuaHuruf.forEach(huruf => {
+                const div = document.createElement("div");
+                div.textContent = huruf.letter;
+                div.dataset.hurufprev = huruf.letter;
+                div.classList.add("huruf-prev");
+                preview.appendChild(div);
+            });
+        }
+
+        fontcase.addEventListener("change", () => {
+            preview.style.textTransform = fontcase.value === "upper" ? "uppercase" : "lowercase";
+        });
+        jenisfont.addEventListener("change", () => {
+            preview.style.fontFamily = jenisfont.value;
+        });
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1)); // angka random dari 0 ke i
+                [array[i], array[j]] = [array[j], array[i]];   // tukar posisi
+            }
+            return array;
+        }
+
+        function acakHuruf() {
+            const hurufElements = document.querySelectorAll(".huruf-prev");
+            const hurufArray = Array.from(hurufElements).map(el => el.dataset.hurufprev);
+            const shuffled = shuffleArray(hurufArray);
+            return shuffled;
+            //preview.innerHTML = "";
+            //shuffled.forEach(h => preview.appendChild(h));
+        }
+
+        function speak(text) {
+            return new Promise((resolve) => {
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = "id-ID";
+                u.rate = 1;
+                u.pitch = 1;
+                u.volume = 1;
+
+                u.onend = () => {
+                    resolve(); // selesai berbicara
+                };
+
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            });
+        }
+        mulaiBtn.addEventListener("click", () => {
+            indexSoal = 0;
+            soal = acakHuruf();
+            tampilSoal(soal);
+            mulaiBtn.textContent = "🔁 Reset";
+
+        });
+
+        function tampilSoal(arr) {
+            if (indexSoal < arr.length) {
+                const hasil = semuaHuruf.find(item => item.letter === arr[indexSoal]);
+                
+                speak(`carilah huruf ${arr[indexSoal]} untuk ${hasil.word}`);
+            }
+        }
+
+        preview.addEventListener("click", async (e) => {
+            if (e.target.classList.contains("huruf-prev")) {
+                const hurufDipilih = e.target.dataset.hurufprev;
+                //console.log("Soal sekarang:", soal[indexSoal], "Huruf dipilih:", hurufDipilih);
+                if (hurufDipilih == soal[indexSoal]) {
+                    e.target.style.backgroundColor = "rgb(199 207 202)"; // hijau
+
+                    speak("benar").then(() => {
+                        indexSoal++;
+
+                        if (indexSoal < soal.length) {
+                            tampilSoal(soal); // lanjut setelah suara selesai
+                        } else {
+                            speak("Hebat, semua soal berhasil dijawab");
+                        }
+                    });
+
+                } else {
+                    //console.log(`Jawaban salah. Soal: ${soal[indexSoal]}`);
+                    await speak("jawaban salah, carilah huruf " + soal[indexSoal] + " untuk " + semuaHuruf.find(item => item.letter === soal[indexSoal]).word);
+                   
+                }
+
+            }
+
+        })
+        sebarhuruf();
+    </script>
+</body>
+
+</html>

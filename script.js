@@ -1,15 +1,26 @@
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
+const dropdownContent = document.querySelector('.dropdown-content');
+const laysubmenu=document.querySelector(".laysubmenu")
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
+function show(button) {
+    button.children[1].classList.toggle('rotate')
+    let btnsibling=button.nextElementSibling
+    btnsibling.classList.toggle('show')
+    cekDrop(button)
+}
 
-// Menutup menu ketika link diklik
-document.querySelectorAll('.nav-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-    });
-});
+function cekDrop(btncek){
+    let alldrop=document.querySelectorAll('.dropdown-content.show')
+    alldrop.forEach(a=>{
+        if(a!=btncek.nextElementSibling){
+            a.classList.remove('show')
+            a.parentElement.children[0].children[1].classList.remove('rotate')
+        }
+    })
+}
+
+hamburger.addEventListener("click",e=>{
+    hamburger.classList.toggle("active")
+    laysubmenu.classList.toggle("active")
+})

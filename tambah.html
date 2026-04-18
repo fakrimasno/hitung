@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Berhitung</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,16 +12,66 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="#">Logo</a>
+                <img src="keranjang.png" alt="">
             </div>
+            <div class="laysubmenu">
+                <div class="dropdown">
+                    <button class="dropbtn" onclick="show(this)">
+                        <span>Berhitung</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#5f6368">
+                            <path d="M480-360 280-560h400L480-360Z" />
+                        </svg></button>
+                    <div class="dropdown-content">
+                        <div>
+                            <ul>
+                                <li><a href="index.html" class="active">🔢Hitung Buah</a></li>
+                                <li><a href="tambah.html">➕Penjumlahan</a></li>
+                                <li><a href="kurang.html">➖Pengurangan</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="tambah.html" class="active">Penjumlahan</a></li>
-                <li><a href="kurang.html">Pengurangan</a></li>
-                <li><a href="uang.html">Uang</a></li>
-                <li><a href="jumlahuang.html">Beri_uang</a></li>
-            </ul>
+                <div class="dropdown">
+                    <button class="dropbtn" onclick="show(this)">
+                        <span>Uang</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#5f6368">
+                            <path d="M480-360 280-560h400L480-360Z" />
+                        </svg>
+                    </button>
+
+                    <div class="dropdown-content">
+                        <div>
+                            <ul>
+                            <li><a href="uang.html">💸Tebak Uang</a></li>
+                            <li><a href="jmluang.html">💰Jumlah Uang</a></li>
+                            <li><a href="beriuang.html">💰Beri Uang</a></li>                            
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="dropdown">
+                    <button class="dropbtn" onclick="show(this)">
+                        <span>Huruf</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#5f6368">
+                            <path d="M480-360 280-560h400L480-360Z" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-content">
+                        <div>
+                            <ul>
+                            <li><a href="tebakhuruf.html">Tebak Huruf</a></li>
+                            <li><a href="ejakata.html">Eja Kata</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="hamburger">
                 <span></span>
@@ -30,48 +80,58 @@
             </div>
         </div>
     </nav>
-    <div class="layout">
-        <h2>🔢 Penjumlahan</h2>
-        <div class="info">
-            <p id="level">Level: 1</p>
-            <div><select name="tingkat" id="tingkat">
-                    <option value="">Pilih Level</option>
-                    <option value="1">Level 1</option>
-                    <option value="2">Level 2</option>
-                    <option value="3">Level 3</option>
-                    <option value="4">Level 4</option>
-                    <option value="5">Level 5</option>
-                    <option value="6">Level 6</option>
-                    <option value="7">Level 7</option>
-                    <option value="8">Level 8</option>
-                    <option value="9">Level 9</option>
-                    <option value="10">Level 10</option>
-                </select></div>
-            <p id="skor">skor: 0</p>
+    <main>
+        <h1>Penjumlahan!</h1>
+        <div class="submenu">
+            <div class="leveldiv">
+                <label for="level">🚀Level</label>
+                <select name="level" id="level">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div id="info-skor">🎯Skor: 10</div>
         </div>
-        <div class="soal"></div>
-        <div class="buahan">
-            <div class="kiri"></div>
-            <div class="kanan"></div>
+        <div class="main-content">
+            
+            <div class="dflex"><button id="next" class="btn btn-primary">Mulai Berlatih</button></div>
+            <div class="soal-teks dflex"></div>
+            <div class="soal-angka dflex"></div>
+            <div class="response hilang">👎🏻 salah</div>
+            <div class="soal-emoji dflex hilang">
+                <div class="laytambah"></div>
+            </div>
+            <div class="pilihan dflex hilang">
+                <button class="btnpilihan btn">2</button>
+                <button class="btnpilihan btn">3</button>
+                <button class="btnpilihan btn">4</button>
+                <button class="btnpilihan btn">5</button>
+            </div>
         </div>
-        <div class="jawaban"></div>
-        <div class="respon"></div>
-        <button id="next">Mulai</button>
-    </div>
-
+    </main>
     <script src="script.js"></script>
     <script>
+        const next = document.getElementById('next')
+        const soal_angka = document.querySelector(".soal-angka")
+        const soal_teks = document.querySelector(".soal-teks")
+        const level = document.getElementById("level")
         const buah = ["🍎", "🍏", "🍐", "🍊", "🍋", "🍌", "🍉", "🍓", "🥭", "🍍", "🥝", "🍅"]
+        const emoji = document.querySelector('.soal-emoji')
+        const pilihan = document.querySelector(".pilihan")
+        const infoSkor = document.getElementById("info-skor")
+        const response =document.querySelector(".response")
+        const laytambah=document.querySelector(".laytambah")
         let index = 0
-        const soal = document.querySelector('.soal')
-        const jawaban = document.querySelector('.jawaban')
-        const next = document.querySelector('#next')
-        const infoLevel = document.querySelector('#level')
-        const infoSkor = document.querySelector('#skor')
-        const respon = document.querySelector('.respon')
-        const buahan = document.querySelector('.buahan')
-        let level = 1
-        let skor = 0
+        let skor = 0        
+        let curlevel = 1       
         let soal_acak = []
         let index_soal = 0
         const tingkat = document.querySelector('#tingkat')
@@ -88,73 +148,87 @@
             10: [[1, 10],[2, 10],[3, 10],[4, 10],[5, 10],[6, 10],[7, 10],[8, 10],[9, 10],[10, 10]]
         };
 
-        tingkat.addEventListener('change', () => {
-            level = parseInt(tingkat.value)
-            infoLevel.textContent = `🚀Level: ${level}`
-            soal.innerHTML = 'Lanjut ke level '+level
-            index_soal = 0
-            soal_acak = cekLevel(level)
-            next.textContent = `level ${level}`
-            next.classList.remove('hilang')
-        })
 
-        
-
-        next.addEventListener('click',()=>{
-            respon.textContent = ''
-            jawaban.textContent = ''
-            buahan.textContent = ''
+        next.addEventListener('click', e => {
             if (index_soal == 0) {
-                console.log('cek level')
-                soal_acak = cekLevel(level)
-               
+                curelevel = level.value
+                soal_acak = cekLevel(curelevel)
+                emoji.classList.remove("hilang")
+                pilihan.classList.remove("hilang")
             }
             if (index_soal < soal_acak.length) {
-                next.textContent = 'Next'
                 next.classList.add('hilang')
                 const soaltampil = shuffleArray(soal_acak[index_soal])
-                const jumlah = soaltampil[0] + soaltampil[1]
-                const tampilan=`<div class="kiri">${tampilanBuah(soaltampil[0])}<span class="angka">${soaltampil[0]}</span></div><div>+</div><div class="kanan">${tampilanBuah(soaltampil[1])}<span class="angka">${soaltampil[1]}</div>`
-                //const tampilan = tampilanBuah(soaltampil[0]) + " + " + tampilanBuah(soaltampil[1])
-                buahan.innerHTML = tampilan
-                soal.innerHTML = `${soaltampil[0]} + ${soaltampil[1]} =?`
+                const jumlah = soaltampil[1] + soaltampil[0]
+                let tampilan=""
+                console.log("========")
+                console.log(soaltampil,jumlah)
                 
-                speak(`berapakah ${soaltampil[0]} ditambah ${soaltampil[1]}?`)
-                const pilihan = [
+                tampilan=`<div class="kiri" style="font-size:40px;padding-right:9px;">${soaltampil[0]}</div><div style="text-align:center;font-size:40px"> +</div><div class="kanan" style="font-size:40px;padding-left:9px;"> ${soaltampil[1]} =</div><div class="kiri">${tampilanBuah(soaltampil[0])}</div><div style="text-align:center;font-size:40px"> + </div><div class="kanan">${tampilanBuah(soaltampil[1])}</div>`
+                
+                speak(`berapakah ${soaltampil[0]} ditambah ${soaltampil[1]}`)
+                laytambah.innerHTML = tampilan
+                pilihan.innerHTML = ""
+                const pil = [
                     jumlah,
                     jumlah + 1,
+                    jumlah + 2,
                     jumlah - 1
                 ].sort(() => Math.random() - 0.5);
-                pilihan.forEach(p => {
-                    if (p > 0) {
-                        const btn = document.createElement("button");
-                        btn.textContent = p;
-                        btn.onclick = () => cekJawaban(p, jumlah);
-                        jawaban.appendChild(btn);
+
+                pil.forEach(p => {
+                    const btn = document.createElement("button");
+                    btn.textContent = p;
+                    btn.classList.add("btnpilihan")
+                    btn.classList.add("btn")
+
+                    btn.onclick = () => {
+                        setTimeout(() => {
+                            cekJawaban(p, jumlah);
+                        }, 200)
                     }
-                });
+                    pilihan.appendChild(btn);
+
+                })
+
                 index_soal++
-            }else{
-                level++
-                infoLevel.textContent = `🚀Level: ${level}`
-                index_soal = 0
-                soal.innerHTML = 'Lanjut ke level '+level
-                soal_acak = cekLevel(level)
-                next.textContent = `level ${level}`
+            }
+            else {
+                index_soal = 0        
+                curlevel++
+                level.value=curlevel
                 next.classList.remove('hilang')
-                speak(`Selamat Anda naik ke level ${level}, silahkan klik tombol dibawah untuk melanjutkan permainannya!`)
-                if (level > 10) {
+                pilihan.innerHTML = ""
+                emoji.classList.add("hilang")
+                if (curlevel > 10) {
+                    console.log("selesai")
                     next.textContent = 'Selesai'
-                    soal.textContent = 'Selamat Anda Telah Menyelesaikan Semua Level'
                     speak("Selamat Anda telah menyelesaikan semua level, terima kasih telah bermain!")
-                    jawaban.textContent = ''
-                    next.disabled = true
+                    return 0;
+                }else{
+                    console.log("belum selesai")
+                    console.log(curlevel)
+                    next.textContent = "level " + level.value
+                    speak(`Selamat Anda naik ke level ${curelevel}, ayo kita lanjutkan permainannya!`)
                 }
             }
         })
 
-
-
+        level.addEventListener("change", e => {
+            index_soal = 0;
+            curlevel=level.value
+            soal_teks.innerHTML = ""
+            next.classList.remove('hilang')
+            pilihan.innerHTML = ""
+            emoji.classList.add("hilang")
+            next.textContent = "level " + level.value
+            
+        })
+        emoji.addEventListener("click", e => {
+            const box = e.target.closest(".emoji-box");
+            if (!box) return; // bukan klik emoji-box
+            box.classList.toggle("transparan")
+        })
 
         function cekLevel(lev) {
             let temp = levelData[lev] || [];
@@ -170,16 +244,54 @@
             return array;
         }
 
+
         function tampilanBuah(jumlah) {
             let tampilan = ""
             let jenis = buah[Math.floor(Math.random() * buah.length)]
             for (let i = 0; i < jumlah; i++) {
-                tampilan += jenis
+                tampilan += `<div class="emoji-box">${jenis}</div>`
             }
             return tampilan
         }
 
-         function speak(text) {
+        
+
+        async function cekJawaban(pilih, benar) {
+            if (pilih === benar) {
+                soal_angka.innerHTML = ""
+                soal_teks.innerHTML = ""
+                laytambah.innerHTML = ""
+                pilihan.innerHTML = ""
+                skor++
+                infoSkor.innerHTML = `🎯Skor: ${skor}`
+                //document.querySelector(".skor").textContent = `🎯skor: ${skor}`
+                response.innerHTML="👍🏻Benar"
+                response.classList.remove("hilang")
+                await speak(`benar, jawabannya ${benar}`)
+                response.classList.add("hilang")
+                next.click()
+            }
+            else {
+                //respon.textContent = 'Jawaban Salah!'
+                soal_teks.textContent = ""
+                emoji.classList.add("hilang")
+                pilihan.classList.add("hilang")
+                response.innerHTML="👎🏻Salah"
+                response.classList.remove("hilang")
+                await speak("Jawaban salah, coba lagi!")
+                emoji.classList.remove("hilang")
+                pilihan.classList.remove("hilang")
+                response.classList.add("hilang")
+                
+
+            }
+
+        }
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+        function speak(text) {
             return new Promise((resolve) => {
                 const u = new SpeechSynthesisUtterance(text);
                 u.lang = "id-ID";
@@ -196,25 +308,7 @@
             });
         }
 
-        async function cekJawaban(pilihan, benar) {
-            if (pilihan === benar) {
-                soal.innerHTML = ''
-                buahan.textContent = ''
-                jawaban.textContent = ''
-                skor++
-                infoSkor.textContent = `🎯skor: ${skor}`
-                respon.textContent = "👍  " + benar
-                await speak(`benar, jawabannya ${benar}`)
-                next.click()
-                
-            }
-            else {
-                respon.textContent = "❌"
-                await speak("Jawaban salah, coba lagi!")
-            }
-
-        }
-
+        speak("Halo ibrahim abdulah haris. selamat datang di permainan menghitung, silahkan klik tombol mulai untuk memulai permainan")
     </script>
 </body>
 
